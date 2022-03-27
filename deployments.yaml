@@ -1,9 +1,28 @@
 # note: YAML definitions for multiple components/resources can be bundled together into one YAML file
 # '---' is used to separate the definitions of the components/resources
+apiVersion: apps/v1
+kind: Pod
 
+metadata:
+  name: cloudhack-1
+spec:
+  containers:
 # define the `Deployment` for the mongodb server
----
+  - name: mongodb-server
+    image: mongo
+    env:
+      - name: SECRET_USER
+        valueFrom:
+          secretKeyRef:
+            name: cloudhack-secrets
+            key: user
+      - name: SECRET_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: cloudhack-secrets
+            key: password
 # define the `Deployment` for mongo-express
 ---
 # define the `Deployment` for flask-app
 # set ImagePullPolicy to 'Never' to allow the use of the locally built image
+imagePullPolicy: Never
