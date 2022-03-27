@@ -11,6 +11,8 @@ host = ''    # service name of the mongodb admin server as set in mongo-deployme
 port = ''              # port number of the mongodb admin server as set in mongo-deployment.yaml
 conn_string = f'mongodb://{user}:{password}@{host}:{port}'
 
+conn_string = f'mongodb://127.0.0.1:27017'
+
 db = MongoClient(conn_string).blog
 
 @app.route('/')
