@@ -73,4 +73,26 @@ spec:
                 key: database_url
 ---
 # define the `Deployment` for flask-app
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-server-deployment
+  labels:
+    app: flask
+spec:
+  selector:
+    matchLabels:
+      app: flask
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: flask
+    spec:
+      containers:
+      - name: flask-server-deployment
+        image: flask-app-image
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80
 # set ImagePullPolicy to 'Never' to allow the use of the locally built image

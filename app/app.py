@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 user = 'user1'           # username as set for the mongodb admin server (the username used in secret.yaml - before base64 conversion)
 password = 'user1'       # password as set for the mongodb admin server (the password used in secret.yaml - before base64 conversion)
-host = 'mongi-express-service'    # service name of the mongodb admin server as set in mongo-deployment.yaml
+host = 'mongo-express-service'    # service name of the mongodb admin server as set in mongo-deployment.yaml
 port = '8081'              # port number of the mongodb admin server as set in mongo-deployment.yaml
 conn_string = f'mongodb://{user}:{password}@{host}:{port}'
 

@@ -3,3 +3,4 @@ ADD . /app
 WORKDIR /app
 RUN pip install -r requirements.txt
 EXPOSE 5001 8090
+CMD ["python3","app.py"]
