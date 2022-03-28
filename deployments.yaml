@@ -1,28 +1,76 @@
-# note: YAML definitions for multiple components/resources can be bundled together into one YAML file
-# '---' is used to separate the definitions of the components/resources
 apiVersion: apps/v1
-kind: Pod
-
+kind: Deployment
 metadata:
   name: cloudhack-1
+  labels:
+    app: mongodb
 spec:
-  containers:
-# define the `Deployment` for the mongodb server
-  - name: mongodb-server
-    image: mongo
-    env:
-      - name: SECRET_USER
-        valueFrom:
-          secretKeyRef:
-            name: cloudhack-secrets
-            key: user
-      - name: SECRET_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: cloudhack-secrets
-            key: password
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        imagePullPolicy: Never
+        image: mongo
+        ports:
+          - containerPort: 27017
+        env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: cloudhack-secrets
+                  key: user
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cloudhack-secrets
+                  key: password 
 # define the `Deployment` for mongo-express
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-express-deployment
+  labels:
+    app: mongo-express
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-express
+  template:
+    metadata:
+      labels:
+        app: mongo-express
+    spec:
+      containers:
+      - name: mongo-express
+        imagePullPolicy: Never
+        image: mongo-express
+        ports:
+          - containerPort: 8081
+        env:
+          - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+            valueFrom:
+              secretKeyRef:
+                name: cloudhack-secrets
+                key: user
+          - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: cloudhack-secrets
+                key: password
+          - name: ME_CONFIG_MONGODB_SERVER
+            valueFrom:
+              configMapKeyRef:
+                name: mongodb-configmap
+                key: database_url
 ---
 # define the `Deployment` for flask-app
 # set ImagePullPolicy to 'Never' to allow the use of the locally built image
-imagePullPolicy: Never
