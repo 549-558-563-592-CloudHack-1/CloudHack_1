@@ -40,7 +40,6 @@ spec:
   - port: 5001
     protocol: TCP
     targetPort: 5001
-    nodePort: 32000
   selector:
     app: flask
   type: LoadBalancer

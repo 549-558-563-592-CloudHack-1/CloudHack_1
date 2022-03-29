@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 user = 'user1'           # username as set for the mongodb admin server (the username used in secret.yaml - before base64 conversion)
 password = 'user1'       # password as set for the mongodb admin server (the password used in secret.yaml - before base64 conversion)
-host = 'cloudhack-1'    # service name of the mongodb admin server as set in mongo-deployment.yaml
+host = 'mongodb-service'    # service name of the mongodb admin server as set in mongo-deployment.yaml
 port = '27017'              # port number of the mongodb admin server as set in mongo-deployment.yaml
 conn_string = f'mongodb://{user}:{password}@{host}:{port}'
 
@@ -17,7 +17,6 @@ db = MongoClient(conn_string).blog
 @app.route('/')
 def home():
     posts = list(db.posts.find({}))
-    #posts = []
     return render_template("home.html", homeIsActive=True, createPostIsActive=False, posts=posts)
 
 @app.route('/create-post', methods=["GET", "POST"])
